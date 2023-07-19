@@ -1,5 +1,6 @@
 import React, {useState, useEffect}  from 'react'
 import ListItem from '../components/ListItem'
+import AddButton from '../components/AddButton'
 
 const NotesListPage = () => {
 	let [notes, setNotes] = useState([])
@@ -15,6 +16,7 @@ const NotesListPage = () => {
 		setNotes(data)
 
 	}
+
 	return (
 			<div className='notes'>
 				<div className='notes-header'>
@@ -26,6 +28,7 @@ const NotesListPage = () => {
 						<ListItem key={i} note={note}/>
 						)}
 				</div>
+				<AddButton />
 			</div>
 		)
 }
