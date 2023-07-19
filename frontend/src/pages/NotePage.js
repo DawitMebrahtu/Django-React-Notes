@@ -14,7 +14,6 @@ const NotePage = ({history}) => {
 		let response = await fetch(`http://127.0.0.1:8000/api/notes/${id}`)
 		let data = await response.json();
 		setNote(data);
-		console.log('dd', data, id);
 	};
 
 
