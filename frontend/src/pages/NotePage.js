@@ -1,38 +1,53 @@
 import React, { useState, useEffect } from 'react';
+import {ReactComponent as ArrowLeft} from '../assets/arrow-left.svg'
+import {Link, useNavigate} from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 
-const NotePage = () => {
-  const { id } = useParams();
-  const [note, setNote] = useState(null);
+const NotePage = ({history}) => {
+	let navigate = useNavigate()
 
-  const getNote = async () => {
-    console.log('id:',id)
-    try {
-        let response = await fetch(`http://127.0.0.1:8000/api/notes/${id}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch note data');
-        }
-        let data = await response.json();
-        setNote(data);
-        console.log('dd', data, id);
-      }
-     catch (error) {
-          console.log('four')
+	const { id } = useParams();
+	const [note, setNote] = useState(null);
 
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getNote();
-  }, [id]);
+	const getNote = async () => {
+	console.log('id:',id)
+		let response = await fetch(`http://127.0.0.1:8000/api/notes/${id}`)
+		let data = await response.json();
+		setNote(data);
+		console.log('dd', data, id);
+	};
 
 
-  return (
-    <div>
-      <h3>{note?.body}</h3>
-    </div>
-  );
-};
+	let updateNote = async () => {
+	  fetch(`http://127.0.0.1:8000/api/notes/${id}/update`, {
+	    method: 'PUT',
+	    headers: {
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(note)
+	  });
+	};
+
+  	let handleSubmit = () =>{
+  		updateNote()
+  		navigate('/')
+  	}
+
+	useEffect(() => {
+	getNote();
+	}, [id]);
+
+
+	return (
+			<div className='note'>
+				<div className='note-header'>
+					<h3>
+							<ArrowLeft onClick={handleSubmit} />
+					</h3>
+				</div>
+			  	<textarea onChange={(e) => {setNote({...note, 'body':e.target.value})}} defaultValue={note?.body}></textarea>
+			</div>
+	)
+}
 
 export default NotePage;
